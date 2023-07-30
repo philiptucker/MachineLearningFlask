@@ -7,6 +7,9 @@ import pandas as pd
 from recipe_form import RecipeForm
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(32)
+app.config['SUBMITTED_DATA'] = os.path.join("static", "data_dir", "")
+app.config['SUBMITTED_IMG'] = os.path.join("static", "image_dir", "")
 
 
 @app.route('/')
@@ -18,7 +21,7 @@ def home_page():
     return render_template('home_page.html')
 
 
-@app.route('/add_recipe')
+@app.route('/add_recipe', methods=['POST', 'GET'])
 def add_recipe():
     """
     Funtion to display add recipe page
@@ -31,10 +34,10 @@ def add_recipe():
         recipe_serving = form.recipe_serving.data
         recipe_instructions = form.recipe_instructions.data
         img_filename = recipe_name.lower().replace(" ", "_") + "." + \
-                       secure_filename(form.recipe_img.filename).split('.')[-1]
+                       secure_filename(form.recipe_img.name).split('.')[-1]
         form.recipe_img.data.save(os.path.join(app.config['SUBMITTED_IMG'] + img_filename))
-        df = pd.DataFrame({'Name: ': recipe_name, 'Ingredients: ': recipe_ingredients,
-                           'Serving Size: ': recipe_serving, 'Instructions: ': recipe_instructions})
+        df = pd.DataFrame({'Name': recipe_name, 'Ingredients': recipe_ingredients,
+                           'Serving Size': recipe_serving, 'Instructions': recipe_instructions}, index=[0])
         df.to_csv(os.path.join(app.config['SUBMITTED_IMG'] + recipe_name.lower().replace(" ", "_") + ".csv"))
         print(df)
         return redirect(url_for('home_page'))
