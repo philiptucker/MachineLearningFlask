@@ -1,0 +1,38 @@
+ project is to create a web app to a collection of cooking recipes.
+
+The project must use the following technologies:
+- Python Flask server to generate the html pages for the project.
+- Jinja2 templates to re-use html
+- Appropriate form validation
+- CSS for html styles
+- CSV files to store recipe information
+- Search functionality - Pandas to read in the information from CSV into
+    dataframes along with suitable filter operations
+- Git and GitHub for version control
+
+For a higher grade, you should implement the following as well: (please see rubric for more details)
+
+- Bootstrap to manage styles
+- Deploy to the web using a suitable platform like PythonAnywhere or AWS
+
+
+Create a homepage
+Create page with forms for adding recipes w/ appropriate validation
+    - Title of recipe
+    - Image of recipe (allow only image formats)
+    - Type of recipe: (meat-based, vegetarian, vegan)
+    - Type of meal: (light-meal, dinner, dessert)
+    - Potential allergies
+    - Serving size
+    - List of ingredients
+    - Instructions
+Save recipe to CSV file
+Create page for searching recipes and displaying them using Pandas/dataframes
+Create page to remove recipes
+
+*Optional*
+Bootstrap to manage styles
+Deploy using PythonAnywhere
+
+
+
