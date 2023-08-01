@@ -1,39 +1,32 @@
 {% extends "base.html" %}
-{% from "form-macros.html" import render_field %}
 
 {% block page_title %}
-
 {% endblock %}
 
 {% block h1_Description %}
-
 {% endblock %}
 
 {% block h1_Content %}
-
 {% endblock %}
 
 {% block h2_Description %}
-
 {% endblock %}
 
 {% block h2_Content %}
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <img src="static/image_dir/{{ recipe.pic }}" alt=""
-                 class="img-responsive d-block ui-w-100 rounded circle"
+            <img src="{{ url_for('static', filename='image_dir/{}'.format(recipe.img)) }}">
         </div>
         <div class="col-md-8">
             <h4 class="font-weight-bold mb-0">Recipe Name:
-                <span class="text-muted font-weight-normal">{{ recipe.name }}</span></h4>
+                <span class="text-muted font-weight-normal">{{ recipe['name'] }}</span></h4>
             <h4 class="font-weight-bold mb-0">Ingredients:
                 <span class="text-muted font-weight-normal">{{ recipe.ingredients }}</span></h4>
             <h4 class="font-weight-bold mb-0">Serving size:
-                <span class="text-muted font-weight-normal">{{ recipe.servings }}</span></h4>
+                <span class="text-muted font-weight-normal">{{ recipe.serving }}</span></h4>
             <h4 class="font-weight-bold mb-0">Instructions:
                 <span class="text-muted font-weight-normal">{{ recipe.instructions }}</span></h4>
-
         </div>
     </div>
 </div>

@@ -3,7 +3,6 @@ import os.path
 from flask import Flask, redirect, url_for, request, render_template
 from werkzeug.utils import secure_filename
 import pandas as pd
-
 from recipe_form import RecipeForm
 
 app = Flask(__name__)
@@ -34,12 +33,12 @@ def add_recipe():
         recipe_serving = form.recipe_serving.data
         recipe_instructions = form.recipe_instructions.data
         img_filename = recipe_name.lower().replace(" ", "_") + "." + \
-                       secure_filename(form.recipe_img.name).split('.')[-1]
+                       secure_filename(form.recipe_img.data.filename).split('.')[-1]
         form.recipe_img.data.save(os.path.join(app.config['SUBMITTED_IMG'] + img_filename))
-        df = pd.DataFrame({'Name': recipe_name, 'Ingredients': recipe_ingredients,
-                           'Serving Size': recipe_serving, 'Instructions': recipe_instructions}, index=[0])
-        df.to_csv(os.path.join(app.config['SUBMITTED_IMG'] + recipe_name.lower().replace(" ", "_") + ".csv"))
+        df = pd.DataFrame([{'name': recipe_name, 'img': img_filename, 'ingredients': recipe_ingredients,
+                           'serving': recipe_serving, 'instructions': recipe_instructions}])
         print(df)
+        df.to_csv(os.path.join(app.config['SUBMITTED_DATA'] + recipe_name.lower().replace(" ", "_") + ".csv"))
         return redirect(url_for('home_page'))
     else:
         return render_template('add_recipe.html', form=form)
@@ -47,9 +46,25 @@ def add_recipe():
 
 @app.route('/view_recipe/<name>')
 def display_recipe(name):
-    df = pd.read_csv(os.path.join(app.config['SUBMITTED_IMG'] + name.lower().replace(" ", "_") + ".csv"))
+    """
+    Function to display a recipe
+    :param name: Name of recipe
+    :return:
+    """
+    df = pd.read_csv(os.path.join(app.config['SUBMITTED_DATA'] +
+                                  name.lower().replace(" ", "_") + ".csv"), index_col=False)
     print(df.iloc[0]['name'])
     return render_template('view_recipe.html', recipe=df.iloc[0])
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """
+    Standard error handling
+    :param e: Error details
+    :return:
+    """
+    return render_template('404.html'), 404
 
 
 if __name__ == "__main__":
