@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "form-macros.html" import render_field %}
+
+{% block page_title %}
+{% endblock %}
+
+{% block h1_Description %}
+{% endblock %}
+
+{% block h1_Content %}
+{% endblock %}
+
+{% block h2_Description %}
+Enter a recipe or ingredient to search for:
+{% endblock %}
+
+{% block h2_Content %}
+<section>
+    <form action="" enctype="multipart/form-data" method="post">
+        {{ form.csrf_token }}
+        <div class="row">
+            <div class="col-md-6">
+                <h3></h3>
+                <table>
+                    {{ render_field(form.search, size=20) }}
+                </table>
+            </div>
+            <table>
+                <tr class="submit">
+                    <td></td>
+                    <td>
+                        <button type="submit">Search</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+</section>
+{% endblock %}

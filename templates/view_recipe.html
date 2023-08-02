@@ -16,15 +16,16 @@
 <div class="container">
     <div class="row">
         <div class="col-md-4">
-            <img src="{{ url_for('static', filename='image_dir/{}'.format(recipe.img)) }}">
+            <img src="{{ url_for('static', filename='image_dir/{}'.format(recipe.img)) }}"
+                 style="max-width: 50%; height: auto;">
         </div>
         <div class="col-md-8">
             <h4 class="font-weight-bold mb-0">Recipe Name:
                 <span class="text-muted font-weight-normal">{{ recipe['name'] }}</span></h4>
             <h4 class="font-weight-bold mb-0">Ingredients:
-                <span class="text-muted font-weight-normal">{{ recipe.ingredients }}</span></h4>
+                <span class="text-muted font-weight-normal">{{ recipe.ingredients.replace(", ", "\n") }}</span></h4>
             <h4 class="font-weight-bold mb-0">Serving size:
-                <span class="text-muted font-weight-normal">{{ recipe.serving }}</span></h4>
+                <span class="text-muted font-weight-normal">{{ recipe.serving }} people</span></h4>
             <h4 class="font-weight-bold mb-0">Instructions:
                 <span class="text-muted font-weight-normal">{{ recipe.instructions }}</span></h4>
         </div>
