@@ -14,3 +14,7 @@ class RecipeForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     search = StringField('', validators=[DataRequired()])
+
+
+class RemoveForm(FlaskForm):
+    remove = StringField('', validators=[DataRequired()])

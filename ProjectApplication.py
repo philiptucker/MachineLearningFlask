@@ -3,7 +3,7 @@ import pandas as pd
 from flask import Flask, redirect, url_for, request, render_template
 from jinja2 import Environment
 from werkzeug.utils import secure_filename
-from recipe_form import RecipeForm, SearchForm
+from recipe_form import RecipeForm, SearchForm, RemoveForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'aaWCasdhaeAYGFSDG67893aehC4v5aB6aVavwev4545345v345v3SDFgdrg'
@@ -89,14 +89,41 @@ def search_recipe():
         return render_template('search_recipe.html', form=form)
 
 
-@app.route('/remove_recipe')
+@app.route('/remove_recipe', methods=['POST', 'GET'])
 def remove_recipe():
     """
     Function to list all recipes and select one to remove
     :return:
     """
-    recipes = ""
-    return render_template('recipe_list.html', recipe=recipes)
+    all_recipes = os.listdir(app.config['SUBMITTED_DATA'])
+    combined_recipes = pd.concat([pd.read_csv(app.config['SUBMITTED_DATA'] + f, usecols=['name', 'ingredients'])
+                                  for f in all_recipes])
+
+    listedResults = combined_recipes['name'].values.tolist()
+    form = RemoveForm()
+    if form.validate_on_submit():
+        remove = form.remove.data.casefold()
+
+        df = pd.read_csv(os.path.join(app.config['SUBMITTED_DATA'] + remove.lower().replace(" ", "_") + ".csv"),
+                         index_col=False)
+
+        remove_img = df.loc[0]['img']
+
+        remove_csv = remove + ".csv"
+        print(remove_csv + " + " + remove_img)
+
+        print(os.listdir('static\\data_dir\\'))
+
+        if os.path.isfile('static\\data_dir\\' + remove_csv):
+            os.remove('static\\data_dir\\' + remove_csv)
+            os.remove('static\\image_dir\\' + remove_img)
+            print(f"{remove} has been removed from the list of recipes.")
+        else:
+            print(f"The recipe: '{remove}' was not found.")
+
+        return redirect(url_for('home_page'))
+    else:
+        return render_template('recipe_list.html', form=form, recipe=listedResults, len=len(listedResults))
 
 
 @app.route('/results')
