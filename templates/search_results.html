@@ -16,8 +16,14 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8">
-            <h4 class="font-weight-bold mb-0">Recipe Name:
-                <span class="text-muted font-weight-normal">{{ recipe['name'] }}</span></h4>
+            <h4 class="font-weight-bold mb-0">Found Recipes with {{ search }}:</h4>
+            <ul>
+                {% for i in range(0, len) %}
+
+                <li><a href="{{ url_for('display_recipe', name=recipe[i]) }}">{{ recipe[i] }}</a></li>
+
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>

@@ -1,21 +1,14 @@
 import os.path
 import pandas as pd
-import glob
 from flask import Flask, redirect, url_for, request, render_template
 from jinja2 import Environment
 from werkzeug.utils import secure_filename
 from recipe_form import RecipeForm, SearchForm
 
-# abs_path = os.path.abspath("static\\data_dir").replace("'", '"')
-# os.chdir(abs_path)
-
-os.chdir("C:\\Users\\Indigo\\Desktop\\Accelerated Software Development\\Term 2\\CP 1895\\Assignments\\Project\\static\\data_dir")
-
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.urandom(32)
-app.config['SUBMITTED_DATA'] = os.path.join("static", "data_dir", "")
-app.config['SUBMITTED_IMG'] = os.path.join("static", "image_dir", "")
-TEMPLATE_ENVIRONMENT = Environment(keep_trailing_newline=True)
+app.config['SECRET_KEY'] = 'aaWCasdhaeAYGFSDG67893aehC4v5aB6aVavwev4545345v345v3SDFgdrg'
+app.config['SUBMITTED_DATA'] = os.path.join('static', 'data_dir', '')
+app.config['SUBMITTED_IMG'] = os.path.join('static', 'image_dir', '')
 
 
 @app.route('/')
@@ -35,15 +28,15 @@ def add_recipe():
     """
     form = RecipeForm()
     if form.validate_on_submit():
-        recipe_name = form.recipe_name.data
-        recipe_ingredients = form.recipe_ingredients.data.lower()
+        recipe_name = form.recipe_name.data.casefold()
+        recipe_ingredients = form.recipe_ingredients.data.casefold()
         recipe_serving = form.recipe_serving.data
         recipe_instructions = form.recipe_instructions.data
         img_filename = recipe_name.lower().replace(" ", "_") + "." + \
                        secure_filename(form.recipe_img.data.filename).split('.')[-1]
         form.recipe_img.data.save(os.path.join(app.config['SUBMITTED_IMG'] + img_filename))
         df = pd.DataFrame([{'name': recipe_name, 'img': img_filename, 'ingredients': recipe_ingredients,
-                            'serving': recipe_serving, 'instructions': recipe_instructions}], index=recipe_name)
+                            'serving': recipe_serving, 'instructions': recipe_instructions}])
         print(df)
         df.to_csv(os.path.join(app.config['SUBMITTED_DATA'] + recipe_name.lower().replace(" ", "_") + ".csv"))
         return redirect(url_for('home_page'))
@@ -71,27 +64,39 @@ def search_recipe():
     :return:
     """
     form = SearchForm()
-    extension = 'csv'
-
     if form.validate_on_submit():
-        search = form.search.data.upper().lower()
+        search = form.search.data.casefold()
 
-        all_recipes = [i for i in glob.glob('*.{}'.format(extension))]
-        combined_recipes = pd.concat([pd.read_csv(f, usecols=['name', 'ingredients'])
+        all_recipes = os.listdir(app.config['SUBMITTED_DATA'])
+        combined_recipes = pd.concat([pd.read_csv(app.config['SUBMITTED_DATA'] + f, usecols=['name', 'ingredients'])
                                       for f in all_recipes])
+
         contains_ingredients = combined_recipes[combined_recipes['ingredients'].apply(lambda x: search in x)]
         contains_name = combined_recipes[combined_recipes['name'].apply(lambda x: search in x)]
         found_results = pd.concat([contains_name, contains_ingredients])
+
+        listedResults = found_results['name'].values.tolist()
 
         print(search)
         print(contains_ingredients)
         print(contains_name)
         print()
-        print(found_results)
+        print(found_results.iloc[:]['name'])
+        print(listedResults)
 
-        return render_template('search_results.html', recipe=found_results.iloc[0:100])
+        return render_template('search_results.html', recipe=listedResults, len=len(listedResults), search=search)
     else:
         return render_template('search_recipe.html', form=form)
+
+
+@app.route('/remove_recipe')
+def remove_recipe():
+    """
+    Function to list all recipes and select one to remove
+    :return:
+    """
+    recipes = ""
+    return render_template('recipe_list.html', recipe=recipes)
 
 
 @app.route('/results')
