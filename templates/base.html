@@ -26,9 +26,10 @@
                 <h1 class="title">{% block page_title %}{% endblock %}</h1>
                 <nav>
                     <ul>
-                        <li><a href="{{ url_for('home_page') }}">Home</a></li>
+                        <li><a href="{{ url_for('home_page') }}">Home Page</a></li>
                         <li><a href="{{ url_for('search_recipe') }}">Find Recipe</a></li>
                         <li><a href="{{ url_for('add_recipe')}}">Add Recipe</a></li>
+                        <li><a href="{{ url_for('remove_recipe') }}">Del Recipe</a></li>
                     </ul>
                 </nav>
             </header>

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+Recipe Application
+{% endblock %}
+
+{% block h1_Description %}
+{% if confirm == "yes" %}
+{{ remove }} has been successfully removed from our list of recipes
+{% else %}
+{{ remove }} is not a recipe in our directory
+{% endif %}
+{% endblock %}
+
+{% block h1_Content %}
+{% endblock %}
+
+{% block h2_Description %}
+{% endblock %}
+
+{% block h2_Content %}
+{% endblock %}

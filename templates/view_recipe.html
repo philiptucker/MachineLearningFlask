@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block page_title %}
+Recipe Application
 {% endblock %}
 
 {% block h1_Description %}
@@ -22,12 +23,24 @@
         <div class="col-md-8">
             <h4 class="font-weight-bold mb-0">Recipe Name:
                 <span class="text-muted font-weight-normal">{{ recipe['name'] }}</span></h4>
-            <h4 class="font-weight-bold mb-0">Ingredients:
-                <span class="text-muted font-weight-normal">{{ recipe.ingredients.replace(", ", "\n") }}</span></h4>
+            <h4 class="font-weight-bold mb-0">Ingredients:</h4>
+            <ul style="list-style-type: none;">
+                {% for i in recipe.ingredients.split("\r\n") %}
+
+                <li>{{ i }}</a></li>
+
+                {% endfor %}
+            </ul>
             <h4 class="font-weight-bold mb-0">Serving size:
                 <span class="text-muted font-weight-normal">{{ recipe.serving }} people</span></h4>
-            <h4 class="font-weight-bold mb-0">Instructions:
-                <span class="text-muted font-weight-normal">{{ recipe.instructions }}</span></h4>
+            <h4 class="font-weight-bold mb-0">Instructions:</h4>
+            <ul style="list-style-type: none;">
+                {% for i in recipe.instructions.split("\r\n") %}
+
+                <li>{{ i }}</a></li>
+
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>

@@ -74,6 +74,7 @@ def search_recipe():
         contains_ingredients = combined_recipes[combined_recipes['ingredients'].apply(lambda x: search in x)]
         contains_name = combined_recipes[combined_recipes['name'].apply(lambda x: search in x)]
         found_results = pd.concat([contains_name, contains_ingredients])
+        found_results = found_results.drop_duplicates()
 
         listedResults = found_results['name'].values.tolist()
 
@@ -103,36 +104,28 @@ def remove_recipe():
     form = RemoveForm()
     if form.validate_on_submit():
         remove = form.remove.data.casefold()
-
-        df = pd.read_csv(os.path.join(app.config['SUBMITTED_DATA'] + remove.lower().replace(" ", "_") + ".csv"),
-                         index_col=False)
-
-        remove_img = df.loc[0]['img']
-
         remove_csv = remove + ".csv"
-        print(remove_csv + " + " + remove_img)
-
-        print(os.listdir('static\\data_dir\\'))
-
         if os.path.isfile('static\\data_dir\\' + remove_csv):
-            os.remove('static\\data_dir\\' + remove_csv)
-            os.remove('static\\image_dir\\' + remove_img)
-            print(f"{remove} has been removed from the list of recipes.")
+
+            df = pd.read_csv(os.path.join(app.config['SUBMITTED_DATA'] + remove.lower().replace(" ", "_") + ".csv"),
+                             index_col=False)
+
+            remove_img = df.loc[0]['img']
+
+            print(remove_csv + " + " + remove_img)
+
+            print(os.listdir('static\\data_dir\\'))
+
+            if os.path.isfile('static\\data_dir\\' + remove_csv):
+                os.remove('static\\data_dir\\' + remove_csv)
+                os.remove('static\\image_dir\\' + remove_img)
+                print(f"{remove} has been removed from the list of recipes.")
+            return render_template('removed.html', remove=remove, confirm="yes")
         else:
             print(f"The recipe: '{remove}' was not found.")
-
-        return redirect(url_for('home_page'))
+            return render_template('removed.html', remove=remove, confirm="no")
     else:
         return render_template('recipe_list.html', form=form, recipe=listedResults, len=len(listedResults))
-
-
-@app.route('/results')
-def results(recipes):
-    """
-    Function to display search results
-    :return:
-    """
-    return render_template('search_results.html', recipe=recipes)
 
 
 @app.errorhandler(404)
