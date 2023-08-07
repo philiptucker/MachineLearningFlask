@@ -1,7 +1,6 @@
 import os.path
 import pandas as pd
-from flask import Flask, redirect, url_for, request, render_template
-from jinja2 import Environment
+from flask import Flask, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 from recipe_form import RecipeForm, SearchForm, RemoveForm
 
