@@ -2,7 +2,7 @@ import os.path
 import pandas as pd
 from flask import Flask, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
-from recipe_form import RecipeForm, SearchForm, RemoveForm
+from mpg_form import MPGForm, SearchForm, RemoveForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'aaWCasdhaeAYGFSDG67893aehC4v5aB6aVavwev4545345v345v3SDFgdrg'
@@ -19,28 +19,35 @@ def home_page():
     return render_template('home_page.html')
 
 
-@app.route('/add_recipe', methods=['POST', 'GET'])
-def add_recipe():
+@app.route('/test_mpg', methods=['POST', 'GET'])
+def test_mpg():
     """
     Funtion to display add recipe page
     :return:
     """
-    form = RecipeForm()
+    form = MPGForm()
     if form.validate_on_submit():
-        recipe_name = form.recipe_name.data.casefold()
+        '''recipe_name = form.recipe_name.data.casefold()
         recipe_ingredients = form.recipe_ingredients.data.casefold()
         recipe_serving = form.recipe_serving.data
-        recipe_instructions = form.recipe_instructions.data
-        img_filename = recipe_name.lower().replace(" ", "_") + "." + \
-                       secure_filename(form.recipe_img.data.filename).split('.')[-1]
-        form.recipe_img.data.save(os.path.join(app.config['SUBMITTED_IMG'] + img_filename))
-        df = pd.DataFrame([{'name': recipe_name, 'img': img_filename, 'ingredients': recipe_ingredients,
-                            'serving': recipe_serving, 'instructions': recipe_instructions}])
+        recipe_instructions = form.recipe_instructions.data'''
+
+        cylinders = form.cylinders.data.casefold()
+        displacement = form.displacement.data.casefold()
+        horsepower = form.horsepower.data.casefold()
+        weight = form.weight.data.casefold()
+        acceleration = form.acceleration.data.casefold()
+        origin = form.origin.data.casefold()
+        model_year = form.model_year.data.casefold()
+
+        df = pd.DataFrame([{'cylinders': cylinders, 'displacement': displacement, 'horsepower': horsepower,
+                            'weight': weight, 'acceleration': acceleration, 'origin': origin,
+                            'model_year': model_year}])
         print(df)
-        df.to_csv(os.path.join(app.config['SUBMITTED_DATA'] + recipe_name.lower().replace(" ", "_") + ".csv"))
+
         return redirect(url_for('home_page'))
     else:
-        return render_template('add_recipe.html', form=form)
+        return render_template('test_mpg.html', form=form)
 
 
 @app.route('/view_recipe/<name>')
