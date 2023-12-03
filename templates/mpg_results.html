@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+Machine Learning Testing Application
+{% endblock %}
+
+{% block h1_Description %}
+{% endblock %}
+
+{% block h1_Content %}
+{% endblock %}
+
+{% block h2_Description %}
+{% endblock %}
+
+{% block h2_Content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4 class="font-weight-bold mb-0">Test results with:</h4>
+            <ul>
+                {% for i in df.columns %}
+                  {% if i != "origin_japan" and i != "origin_usa" %}
+                    <li>{{ i }}: {{ df[i][0] }}</li>
+                    {% elif i == "origin_japan" %}
+                        {% if df[i][0] == 1 and df["origin_usa"][0] == 0 %}
+                            <li>Origin: Japan</li>
+                        {% elif df[i][0] == 0 and df["origin_usa"][0] == 1 %}
+                            <li>Origin: USA</li>
+                        {% else %}
+                            <li>Origin: Europe</li>
+                        {% endif %}
+                  {% endif %}
+                {% endfor %}
+            </ul>
+            <h2>{{ mpg }} Miles per Gallon</h2>
+        </div>
+    </div>
+</div>
+{% endblock %}

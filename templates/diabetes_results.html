@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+Machine Learning Testing Application
+{% endblock %}
+
+{% block h1_Description %}
+{% endblock %}
+
+{% block h1_Content %}
+{% endblock %}
+
+{% block h2_Description %}
+{% endblock %}
+
+{% block h2_Content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h4 class="font-weight-bold mb-0">Test results with:</h4>
+            <ul>
+                {% for i in df.columns %}
+                    <li>{{ i }}: {{ df[i][0] }}</li>
+                {% endfor %}
+            </ul>
+                {% if diabetes == 1 %}
+                    <h2>This individual most likely has diabetes.</h2>
+                {% else %}
+                    <h2>This individual is not likely to have diabetes.</h2>
+                {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
