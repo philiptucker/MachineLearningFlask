@@ -31,7 +31,6 @@ def test_mpg():
     """
     form = MPGForm()
     if form.validate_on_submit():
-        # TODO adjust for models params: cylinder, horsepower, weight, age, origin_japan, origin_usa
         cylinders = form.cylinders.data
         displacement = form.displacement.data
         horsepower = form.horsepower.data
@@ -53,9 +52,7 @@ def test_mpg():
         mpg_predict = lm_model.predict(df)
 
         print((round(mpg_predict[0], 1)))
-        # 16  6 	100.0 	3278 	50 	0 	1
 
-        # return redirect(url_for('home_page'))
         return render_template('mpg_results.html', mpg=(round(mpg_predict[0], 1)), df=df)
     else:
         return render_template('test_mpg.html', form=form)
@@ -69,7 +66,6 @@ def test_diabetes():
     """
     form = DiabetesForm()
     if form.validate_on_submit():
-        # TODO adjust for models params: Pregnancies, Glucose, SkinThickness, Insulin, BMI, Age
         pregnancies = form.pregnancies.data
         glucose = form.glucose.data
         bloodPressure = form.bloodPressure.data
@@ -86,7 +82,7 @@ def test_diabetes():
         diabetes_predict = logr_model.predict(df)
 
         print(diabetes_predict[0])
-        # 0  1 	109 	21 	135 	25.2 	23
+
 
         return render_template('diabetes_results.html', diabetes=diabetes_predict[0], df=df)
     else:
